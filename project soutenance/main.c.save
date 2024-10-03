@@ -1,0 +1,223 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    char nom[50];
+    char prenom[50];
+    char telephone[15];
+    int age;
+    char statut[8];
+    int reference; // Référence unique
+    char date[11]; // Format "YYYY-MM-DD"
+} Reservation;
+
+// Initialisation de 10 réservations statiques
+Reservation reservations[100] = {
+    {"Benali",        "Ahmed",  "0651234567", 30, "valide",     1, "2024-10-01"},
+    {"El Amrani", "Fatima",   "0652345678", 25, "reporte", 2, "2024-10-02"},
+    {"Khalil",          "Rachid",   "0653456789",45, "annule",    3, "2024-10-03"},
+    {"Safi",             "Samira",   "0654567890",60, "traite",      4, "2024-10-04"},
+    {"El Ouardi",   "Mouad",  "0655678901", 22, "valide",       5, "2024-10-05"},
+    {"Zouhir",        "Nadia",     "0656789012", 33, "reporte",  6, "2024-10-06"},
+    {"Boussouf",   "Omar",    "0657890123",  27, "annule",     7, "2024-10-07"},
+    {"Mouhsine",  "Imane",   "0658901234",  37, "traite",       8, "2024-10-08"},
+    {"Tazi",              "Youssef", "0659012345", 41, "valide",        9, "2024-10-09"},
+    {"Ait Saïd",       "Hanan",     "0650123456", 29, "reporte",   10, "2024-10-10"}
+};
+
+int compteur = 10; // Nombre initial de réservations
+
+void afficherReservations() {
+    printf("\n========= Liste des Reservations =========\n\n");
+    printf("| %-10s | %-15s | %-15s | %-5s | %-10s | %-13s | %-10s |\n",
+           "Reference", "Nom", "Prenom", "Age", "Statut", "Telephone", "Date");
+    printf("+------------+-----------------+-----------------+-------+------------+---------------+------------+\n");
+
+    for (int i = 0; i < compteur; i++) {
+        printf("| %-10d | %-15s | %-15s | %-5d | %-10s | %-13s | %-10s |\n",
+               reservations[i].reference, reservations[i].nom, reservations[i].prenom,
+               reservations[i].age, reservations[i].statut, reservations[i].telephone,
+               reservations[i].date);
+    }
+    printf("+------------+-----------------+-----------------+-------+------------+---------------+------------+\n");
+}
+
+int main() {
+    int choix,statu;
+    do {
+        printf("\n============== Menu Principal ==============\n");
+        printf("1- Ajouter une reservation\n");
+        printf("2- Modifier une reservation\n");
+        printf("3- Supprimer une reservation\n");
+        printf("4- Afficher les details d'une reservation\n");
+        printf("5- Afficher toutes les reservations\n");
+        printf("6- Trier les reservations\n");
+        printf("7- Rechercher une reservation\n");
+        printf("8- Statistiques\n");
+        printf("9- Quitter\n");
+        printf("Taper votre choix : ");
+        scanf("%d", &choix);
+
+        switch (choix) {
+            case 1: {
+                if (compteur >= 100) {
+                    printf("La memoire est pleine, impossible d'ajouter une nouvelle reservation.\n");
+                    break;
+                }
+                Reservation r;
+                printf("Nom : "); scanf("%s", r.nom);
+                printf("Prenom : "); scanf("%s", r.prenom);
+                printf("Telephone : "); scanf("%s", r.telephone);
+                printf("Age : "); scanf("%d", &r.age);
+                printf("Statut (1-valide, 2-reporte, 3-annule, 4-traite) : "); scanf("%d", statut);
+                if(statut == 1) r.statut =="valide";
+                else if (statu == 2) r.statut == "reporte";
+                else if(statut == 3) r.statut =="annule";
+                else  if(statut == 4) r.statut == "traite";
+                else printf("(@_@) Votre choix invalid !!");
+                r.reference = compteur + 1; // Référence automatique
+                printf("Date de reservation (YYYY-MM-DD) : "); scanf("%s", r.date);
+
+                reservations[compteur++] = r;
+                printf("Reservation ajoutee avec succes.\n");
+                break;
+            }
+            case 2: {
+                int ref;
+                printf("Entrez la reference de la reservation a modifier : ");
+                scanf("%d", &ref);
+
+                for (int i = 0; i < compteur; i++) {
+                    if (reservations[i].reference == ref) {
+                        printf("Modifier le Nom (%s) : ", reservations[i].nom);
+                        scanf("%s", reservations[i].nom);
+                        printf("Modifier le Prenom (%s) : ", reservations[i].prenom);
+                        scanf("%s", reservations[i].prenom);
+                        printf("Modifier le Telephone (%s) : ", reservations[i].telephone);
+                        scanf("%s", reservations[i].telephone);
+                        printf("Modifier l'Age (%d) : ", reservations[i].age);
+                        scanf("%d", &reservations[i].age);
+                        printf("Modifier le Statut (%s) : ", reservations[i].statut);
+                        scanf("%s", reservations[i].statut);
+                        printf("Modifier la Date (%s) : ", reservations[i].date);
+                        scanf("%s", reservations[i].date);
+                        printf("Reservation modifiee avec succes.\n");
+                        break;
+                    }
+                }
+                printf("Reservation non trouvee.\n");
+                break;
+            }
+            case 3: {
+                int ref;
+                printf("Entrez la reference de la reservation a supprimer : ");
+                scanf("%d", &ref);
+
+                for (int i = 0; i < compteur; i++) {
+                    if (reservations[i].reference == ref) {
+                        for (int j = i; j < compteur - 1; j++) {
+                            reservations[j] = reservations[j + 1];
+                        }
+                        compteur--;
+                        printf("Reservation supprimee avec succes.\n");
+                        break;
+                    }
+                }
+                printf("Reservation non trouvee.\n");
+                break;
+            }
+            case 4: {
+                int ref;
+                printf("Entrez la reference de la reservation a afficher : ");
+                scanf("%d", &ref);
+
+                for (int i = 0; i < compteur; i++) {
+                    if (reservations[i].reference == ref) {
+                        printf("Details de la reservation:\n");
+                        printf("Nom: %s\n", reservations[i].nom);
+                        printf("Prenom: %s\n", reservations[i].prenom);
+                        printf("Telephone: %s\n", reservations[i].telephone);
+                        printf("Age: %d\n", reservations[i].age);
+                        printf("Statut: %s\n", reservations[i].statut);
+                        printf("Reference: %d\n", reservations[i].reference);
+                        printf("Date: %s\n", reservations[i].date);
+                        break;
+                    }
+                }
+                printf("Reservation non trouvee.\n");
+                break;
+            }
+            case 5:
+                afficherReservations();
+                break;
+            case 6: {
+                // Tri par nom (simple bubble sort pour l'exemple)
+                for (int i = 0; i < compteur - 1; i++) {
+                    for (int j = 0; j < compteur - 1 - i; j++) {
+                        if (strcmp(reservations[j].nom, reservations[j + 1].nom) > 0) {
+                            Reservation temp = reservations[j];
+                            reservations[j] = reservations[j + 1];
+                            reservations[j + 1] = temp;
+                        }
+                    }
+                }
+                printf("Reservations triees par nom.\n");
+                break;
+            }
+            case 7: {
+                int ref;
+                printf("Entrez la reference a rechercher : ");
+                scanf("%d", &ref);
+
+                for (int i = 0; i < compteur; i++) {
+                    if (reservations[i].reference == ref) {
+                        printf("Reservation trouvee:\n");
+                        printf("Nom: %s\n", reservations[i].nom);
+                        printf("Prenom: %s\n", reservations[i].prenom);
+                        printf("Telephone: %s\n", reservations[i].telephone);
+                        printf("Age: %d\n", reservations[i].age);
+                        printf("Statut: %s\n", reservations[i].statut);
+                        printf("Date: %s\n", reservations[i].date);
+                        break;
+                    }
+                }
+                printf("Reservation non trouvee.\n");
+                break;
+            }
+            case 8: {
+                int totalAge = 0;
+                int compteurAge = 0;
+                int ageCount[3] = {0, 0, 0}; // Tranches d'age : 0-18, 19-35, 36+
+
+                for (int i = 0; i < compteur; i++) {
+                    totalAge += reservations[i].age;
+                    compteurAge++;
+
+                    if (reservations[i].age <= 18) {
+                        ageCount[0]++;
+                    } else if (reservations[i].age >= 19 && reservations[i].age <= 35) {
+                        ageCount[1]++;
+                    } else {
+                        ageCount[2]++;
+                    }
+                }
+
+                printf("Moyenne d'age des patients: %.2f\n", (compteurAge ? (float)totalAge / compteurAge : 0));
+                printf("Nombre de patients par tranche d'age :\n");
+                printf("0-18 ans: %d\n", ageCount[0]);
+                printf("19-35 ans: %d\n", ageCount[1]);
+                printf("36+ ans: %d\n", ageCount[2]);
+                break;
+            }
+            case 9:
+                printf("Au revoir!\n");
+                break;
+            default:
+                printf("Choix invalide !\n");
+                break;
+        }
+    } while (choix != 9);
+
+    return 0;
+}
